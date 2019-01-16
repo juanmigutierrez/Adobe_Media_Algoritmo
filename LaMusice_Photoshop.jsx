@@ -1,14 +1,15 @@
 var proyecto = new File("C:\\Users\\Recup\\OneDrive\\Documentos\\Algoritmo_Adobe\\La_Musice_Image.psd")
-var Imagen = File("C:\\Users\\Recup\\OneDrive\\Documentos\\Algoritmo_Adobe\\La_Musice_Image.jpg")
+var Imagen_Texto = new File("C:\\Users\\Recup\\OneDrive\\Documentos\\Algoritmo_Adobe\\Direccion_Imagen.txt")
 var doc = app.open(proyecto)
-$.writeln(Image)
+//$.writeln(Image)
 
 
 $.writeln("----")
 app.activeDocument = doc
-
-
-file = app.openDialog();//opens dialog,choose one image
+Imagen_Texto.open("r")
+var file = File(Imagen_Texto.readln()) // file es la imagen
+//file = app.openDialog();//opens dialog,choose one image
+Imagen_Texto.close()
 
 var height;
 var width;
@@ -16,8 +17,8 @@ var scale1;
 var scale2;
 var scalet;
 
-if(file[0]){ //if you have chosen an image
-   app.load(file[0]); //load it into documents
+if(file!=null){ //if you have chosen an image
+   app.load(file); //load it into documents
    backFile= app.activeDocument;
    height = backFile.height;//prepare your image layer as active document
    width = backFile.width ;//resize image into given size i.e 640x480
@@ -29,6 +30,7 @@ if(file[0]){ //if you have chosen an image
    scale1 = 1500/width1; // Se divide sobre 1920 y 1080 debido a que es el tamano de la composition y se e utiliza max por que es un scale con misma proporcion
    scale2 = 1500/height1;
    scalet = Math.max(scale1,scale2)*100
+   backFile.convertProfile ("Working RGB",Intent.ABSOLUTECOLORIMETRIC,true,true)
    backFile.selection.selectAll();
    backFile.selection.copy(); //copy image into clipboard
    backFile.close(SaveOptions.DONOTSAVECHANGES); //close image without saving changes
@@ -38,8 +40,10 @@ if(file[0]){ //if you have chosen an image
 
 
 $.writeln (scalet)
+doc.layers[0].resize(scalet,scalet,AnchorPosition.TOPLEFT)
 doc.layers[0].move(doc.layers[1],ElementPlacement.PLACEAFTER)
-doc.layers[1].resize(scalet,scalet,AnchorPosition.TOPLEFT)
+//doc.layers[0].move(doc.layers[1],ElementPlacement.PLACEAFTER)
+
 
 //Options JPG
 var doc = app.activeDocument;    
